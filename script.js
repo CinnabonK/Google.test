@@ -1,5 +1,5 @@
 // Google Sheets APIを使うための設定
-const SHEET_ID = 'あなたのスプレッドシートID';
+const SHEET_ID = '1F4US2ayj9kxF_EjiXRt6IXG-PvV0wXSQ-3dRPtyNptU';
 const API_KEY = 'あなたのAPIキー';
 const SHEET_NAME = 'シート1';
 

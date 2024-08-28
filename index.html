@@ -73,26 +73,7 @@
             <button class="btn">I'm Feeling Lucky</button>
         </div>
     </div>
-//更新
-   <form id="myForm">
-      名前: <input type="text" name="name"><br>
-      メール: <input type="email" name="email"><br>
-      メッセージ: <textarea name="message"></textarea><br>
-      <input type="button" value="送信" onclick="submitForm()">
-    </form>
-    
-    <script>
-      function submitForm() {
-        const formData = {
-          name: document.querySelector('input[name="name"]').value,
-          email: document.querySelector('input[name="email"]').value,
-          message: document.querySelector('textarea[name="message"]').value,
-        };
-        
-        google.script.run.submitData(formData);
-        document.getElementById('myForm').reset();
-      }
-    </script>
+
 </body>
 </html>
 

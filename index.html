@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.5">
-  <link rel="stylesheet" href="style.css">
   <title>Google</title>
   <style>
     body {
@@ -104,7 +103,7 @@
         fileContent.searchTerm = searchTerm;
 
         // データをGoogle Apps Scriptに送信
-        fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+        fetch('https://script.google.com/macros/s/AKfycbxH0kNTgdM3DfOqVrCcs9i7xPA_6WuwiOcCNtExNwoIcx7Rz39NatKyDdK74FkkycoB/execL', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

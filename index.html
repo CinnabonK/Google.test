@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.5">
-    <title>JSON File Upload</title>
-    <style>
-  body {
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.5">
+  <link rel="stylesheet" href="style.css">
+  <title>Google</title>
+  <style>
+    body {
       font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
@@ -65,62 +66,62 @@
     #fileInput {
       margin-top: 20px;
     }
-    </style>
+  </style>
 </head>
 <body>
-    <div class="search-container">
-        <input type="file" id="fileInput" accept=".json">
-        <input type="text" class="search-box" placeholder="Search Term">
-        <button id="uploadButton">Upload JSON</button>
+  <div class="search-container">
+    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" class="logo">
+    <input type="text" class="search-box" placeholder="Googleで検索">
+    <div class="buttons">
+      <button class="btn" id="uploadButton">Google 検索</button>
+      <button class="btn">I'm Feeling Lucky</button>
     </div>
+    <input type="file" id="fileInput" accept=".json">
+  </div>
 
-    <script>
-        let fileContent = null;  // JSONファイルの内容を格納する変数
+  <script>
+    let fileContent = null;
 
-        // ファイル選択のイベントリスナーを設定
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];  // 選択されたファイル
-            if (file) {
-                const reader = new FileReader();  // FileReaderオブジェクトを作成
-                reader.onload = function(e) {
-                    try {
-                        fileContent = JSON.parse(e.target.result);  // ファイルの内容をJSONとしてパース
-                        alert('JSON file loaded successfully.');
-                    } catch (error) {
-                        alert('Error parsing JSON file: ' + error.message);
-                    }
-                };
-                reader.readAsText(file);  // ファイルをテキストとして読み込む
-            }
+    // JSONファイルの読み込み
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          fileContent = JSON.parse(e.target.result);
+          alert('JSON file loaded successfully.');
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // ボタンをクリックしたときの処理
+    document.getElementById('uploadButton').addEventListener('click', function() {
+      const searchTerm = document.querySelector('.search-box').value;
+
+      if (fileContent) {
+        // 検索用語をファイルに追加
+        fileContent.searchTerm = searchTerm;
+
+        // データをGoogle Apps Scriptに送信
+        fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(fileContent),
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
         });
-
-        // ボタンをクリックしたときの処理
-        document.getElementById('uploadButton').addEventListener('click', function() {
-            const searchTerm = document.querySelector('.search-box').value;
-
-            if (fileContent) {
-                // 検索用語をファイル内容に追加
-                fileContent.searchTerm = searchTerm;
-
-                // データをGoogle Apps Scriptに送信
-                fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(fileContent),  // JSON形式でデータを送信
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            } else {
-                alert('Please upload a JSON file first.');
-            }
-        });
-    </script>
+      } else {
+        alert('Please upload a JSON file first.');
+      }
+    });
+  </script>
 </body>
 </html>

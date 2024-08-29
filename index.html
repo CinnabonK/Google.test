@@ -1,126 +1,68 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.5">
-  <title>Google</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #ffffff;
-      text-align: center;
-    }
-
-    .search-container {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .logo {
-      margin-bottom: 20px;
-    }
-
-    .search-box {
-      width: 100%;
-      max-width: 500px;
-      padding: 10px;
-      border: 1px solid #dfe1e5;
-      border-radius: 24px;
-      box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
-      font-size: 16px;
-    }
-
-    .buttons {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .btn {
-      padding: 10px 20px;
-      border: 1px solid #f8f9fa;
-      border-radius: 4px;
-      background-color: #f8f9fa;
-      color: #5f6368;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3);
-    }
-
-    .btn:hover {
-      background-color: #f1f3f4;
-      box-shadow: 0 1px 2px rgba(60, 64, 67, 0.15);
-    }
-
-    #fileInput {
-      margin-top: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.5">
+    <title>JSON File Upload</title>
+    <style>
+        /* スタイルを必要に応じて追加 */
+    </style>
 </head>
 <body>
-  <div class="search-container">
-    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" class="logo">
-    <input type="text" class="search-box" placeholder="Googleで検索">
-    <div class="buttons">
-      <button class="btn" id="uploadButton">Google 検索</button>
-      <button class="btn">I'm Feeling Lucky</button>
+    <div class="search-container">
+        <input type="file" id="fileInput" accept=".json">
+        <input type="text" class="search-box" placeholder="Search Term">
+        <button id="uploadButton">Upload JSON</button>
     </div>
-    <input type="file" id="fileInput" accept=".json">
-  </div>
 
-  <script>
-    let fileContent = null;
+    <script>
+        let fileContent = null;  // JSONファイルの内容を格納する変数
 
-    // JSONファイルの読み込み
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          fileContent = JSON.parse(e.target.result);
-          alert('JSON file loaded successfully.');
-        };
-        reader.readAsText(file);
-      }
-    });
-
-    // ボタンをクリックしたときの処理
-    document.getElementById('uploadButton').addEventListener('click', function() {
-      const searchTerm = document.querySelector('.search-box').value;
-
-      if (fileContent) {
-        // 検索用語をファイルに追加
-        fileContent.searchTerm = searchTerm;
-
-        // データをGoogle Apps Scriptに送信
-        fetch('https://script.google.com/macros/s/AKfycbxH0kNTgdM3DfOqVrCcs9i7xPA_6WuwiOcCNtExNwoIcx7Rz39NatKyDdK74FkkycoB/exec', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(fileContent),
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
+        // ファイル選択のイベントリスナーを設定
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];  // 選択されたファイル
+            if (file) {
+                const reader = new FileReader();  // FileReaderオブジェクトを作成
+                reader.onload = function(e) {
+                    try {
+                        fileContent = JSON.parse(e.target.result);  // ファイルの内容をJSONとしてパース
+                        alert('JSON file loaded successfully.');
+                    } catch (error) {
+                        alert('Error parsing JSON file: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);  // ファイルをテキストとして読み込む
+            }
         });
-      } else {
-        alert('Please upload a JSON file first.');
-      }
-    });
-  </script>
+
+        // ボタンをクリックしたときの処理
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-box').value;
+
+            if (fileContent) {
+                // 検索用語をファイル内容に追加
+                fileContent.searchTerm = searchTerm;
+
+                // データをGoogle Apps Scriptに送信
+                fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(fileContent),  // JSON形式でデータを送信
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            } else {
+                alert('Please upload a JSON file first.');
+            }
+        });
+    </script>
 </body>
 </html>

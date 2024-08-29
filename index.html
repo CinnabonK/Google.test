@@ -74,41 +74,7 @@
         </div>
     </div>
   
-  ///変更点
-  
-      <h1>Input to Google Sheets</h1>
-    <label for="inputField">Enter something:</label>
-    <input type="text" id="inputField" name="inputField">
-    
-    <script>
-        const inputField = document.getElementById('inputField');
-        
-        inputField.addEventListener('input', function() {
-            const inputValue = inputField.value;
-            
-            // Google Apps ScriptのWeb APIエンドポイント
-            const apiUrl = 'YOUR_GOOGLE_APPS_SCRIPT_URL';
-            
-            // 送信するデータ
-            const data = { value: inputValue };
-            
-            // Fetch APIを使用してデータをPOSTリクエストとして送信
-            fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        });
-    </script>
+
 
 </body>
 </html>

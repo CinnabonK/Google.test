@@ -77,8 +77,7 @@
     document.querySelector('.search-box').addEventListener('input', function() {
       let searchTerm = this.value;
 
-      // 検索バーの内容が変更されるたびにアラートを表示
-      alert('Search term updated: ' + searchTerm);
+     
 
       // データをGoogle Apps Scriptに送信
       fetch('https://script.google.com/macros/s/AKfycbxH0kNTgdM3DfOqVrCcs9i7xPA_6WuwiOcCNtExNwoIcx7Rz39NatKyDdK74FkkycoB/exec', {

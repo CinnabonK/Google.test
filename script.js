@@ -1,33 +1,19 @@
-// Google Sheets APIを使うための設定
-const SHEET_ID = '1F4US2ayj9kxF_EjiXRt6IXG-PvV0wXSQ-3dRPtyNptU';
-const API_KEY = 'あなたのAPIキー';
-const SHEET_NAME = 'シート1';
+document.querySelector('.search-box').addEventListener('input', function() {
+    let searchTerm = this.value;
 
-async function sendToSheet() {
-    const searchBox = document.getElementById('search-box').value;
-
-    // Google Sheets APIにデータを送信
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A1:append?valueInputOption=USER_ENTERED&key=${API_KEY}`;
-
-    const data = {
-        values: [[searchBox]]
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
-            alert('データがスプレッドシートに送信されました');
-        } else {
-            alert('データ送信に失敗しました');
-        }
-    } catch (error) {
-        console.error('エラー:', error);
-    }
-}
+    // データをGoogle Apps Scriptに送信
+    fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ searchTerm: searchTerm }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});

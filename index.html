@@ -112,28 +112,26 @@
         console.log('Sending data:', fileContent);
 
         // データをGoogle Apps Scriptに送信
-        fetch('https://script.google.com/macros/s/AKfycbxH0kNTgdM3DfOqVrCcs9i7xPA_6WuwiOcCNtExNwoIcx7Rz39NatKyDdK74FkkycoB/exec', {
-          method: 'POST',
-            mode: 'no-cors', // ここを追加
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(fileContent),
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Success:', data);
-          alert('データが正常に送信されました。');
-        })
-        .catch((error) => {
-          console.error('Fetch error:', error);
-          alert('データの送信に失敗しました。');
-        });
+     fetch('https://script.google.com/macros/s/AKfycbxH0kNTgdM3DfOqVrCcs9i7xPA_6WuwiOcCNtExNwoIcx7Rz39NatKyDdK74FkkycoB/exec', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(fileContent),
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json(); // レスポンスをJSONとしてパース
+})
+.then(data => {
+    console.log('Success:', data);
+})
+.catch(error => {
+    console.error('Fetch error:', error); // エラーの詳細をコンソールに表示
+    alert('データの送信に失敗しました。もう一度お試しください。');
+});
       } else {
         console.warn('JSONファイルがまだ読み込まれていません。');
       }

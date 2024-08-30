@@ -87,8 +87,14 @@
       if (file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          fileContent = JSON.parse(e.target.result);
-          alert('JSON file loaded successfully.');
+          try {
+            fileContent = JSON.parse(e.target.result);
+            console.log('JSON file loaded successfully:', fileContent);
+            alert('JSONファイルが正常に読み込まれました。');
+          } catch (error) {
+            console.error('JSON parsing error:', error);
+            alert('JSONファイルの解析に失敗しました。');
+          }
         };
         reader.readAsText(file);
       }
@@ -96,11 +102,16 @@
 
     // ボタンをクリックしたときの処理
     document.getElementById('uploadButton').addEventListener('click', function() {
+      console.log('Upload button clicked');
+
       const searchTerm = document.querySelector('.search-box').value;
+      console.log('Search term:', searchTerm);
 
       if (fileContent) {
         // 検索用語をファイルに追加
         fileContent.searchTerm = searchTerm;
+
+        console.log('Sending data:', fileContent);
 
         // データをGoogle Apps Scriptに送信
         fetch('https://script.google.com/macros/s/AKfycbxH0kNTgdM3DfOqVrCcs9i7xPA_6WuwiOcCNtExNwoIcx7Rz39NatKyDdK74FkkycoB/exec', {
@@ -118,7 +129,7 @@
           console.error('Error:', error);
         });
       } else {
-        alert('Please upload a JSON file first.');
+        alert('先にJSONファイルをアップロードしてください。');
       }
     });
   </script>

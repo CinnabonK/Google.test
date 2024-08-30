@@ -112,25 +112,25 @@
         console.log('Sending data:', fileContent);
 
         // データをGoogle Apps Scriptに送信
-     fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(fileContent),
+fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec', {
+  method: 'POST',
+  mode: 'cors',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ searchTerm: 'your search term' })
 })
 .then(response => {
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json(); // レスポンスをJSONとしてパース
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
 })
 .then(data => {
-    console.log('Success:', data);
+  console.log('Success:', data);
 })
 .catch(error => {
-    console.error('Fetch error:', error); // エラーの詳細をコンソールに表示
-    alert('データの送信に失敗しました。もう一度お試しください。');
+  console.error('Fetch error:', error);
 });
       } else {
         console.warn('JSONファイルがまだ読み込まれていません。');

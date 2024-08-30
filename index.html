@@ -114,6 +114,7 @@
         // データをGoogle Apps Scriptに送信
         fetch('https://script.google.com/macros/s/AKfycbxH0kNTgdM3DfOqVrCcs9i7xPA_6WuwiOcCNtExNwoIcx7Rz39NatKyDdK74FkkycoB/exec', {
           method: 'POST',
+            mode: 'no-cors',  // ここを追加
           headers: {
             'Content-Type': 'application/json',
           },

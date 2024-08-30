@@ -100,12 +100,10 @@
       }
     });
 
-    // ボタンをクリックしたときの処理
-    document.getElementById('uploadButton').addEventListener('click', function() {
-      console.log('Upload button clicked');
-
+    // 検索バーの変更を監視し、更新時にデータを送信
+    document.querySelector('.search-box').addEventListener('input', function() {
       const searchTerm = document.querySelector('.search-box').value;
-      console.log('Search term:', searchTerm);
+      console.log('Search term updated:', searchTerm);
 
       if (fileContent) {
         // 検索用語をファイルに追加
@@ -129,7 +127,7 @@
           console.error('Error:', error);
         });
       } else {
-        alert('先にJSONファイルをアップロードしてください。');
+        console.warn('JSONファイルがまだ読み込まれていません。');
       }
     });
   </script>

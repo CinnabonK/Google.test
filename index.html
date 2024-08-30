@@ -112,13 +112,9 @@
         console.log('Sending data:', fileContent);
 
         // データをGoogle Apps Scriptに送信
-fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec', {
-  method: 'POST',
+fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=yourSearchTerm', {
+  method: 'GET',
   mode: 'cors',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ searchTerm: 'your search term' })
 })
 .then(response => {
   if (!response.ok) {
@@ -132,6 +128,7 @@ fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZ
 .catch(error => {
   console.error('Fetch error:', error);
 });
+
       } else {
         console.warn('JSONファイルがまだ読み込まれていません。');
       }

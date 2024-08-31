@@ -57,14 +57,15 @@ fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZ
   },
   body: JSON.stringify(fileContent)
 })
-.then(response => response.text())
+.then(response => response.text())  // レスポンスをテキストとして処理
 .then(text => {
+  console.log('Raw response text:', text);  // 返ってきたレスポンスをログに出力
   try {
-    const data = JSON.parse(text);
-    console.log('Response:', data);
+    const data = JSON.parse(text);  // JSONとしてパースを試みる
+    console.log('Parsed JSON:', data);
     alert('データが正常に送信されました。');
   } catch (error) {
-    console.error('Failed to parse JSON:', text);
+    console.error('Failed to parse JSON. Raw response text:', text);
     alert('レスポンスの解析に失敗しました。');
   }
 })
@@ -72,6 +73,7 @@ fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZ
   console.error('Fetch error:', error);
   alert('データの送信に失敗しました。');
 });
+
 
       } else {
         console.warn('JSONファイルがまだ読み込まれていません。');

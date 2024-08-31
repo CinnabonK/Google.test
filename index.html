@@ -54,19 +54,18 @@ fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZ
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    // 必要に応じて認証情報を追加
-    // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+    'Access-Control-Allow-Origin': '*'  // 必要に応じてオリジンを指定
   },
+  mode: 'cors',
   body: JSON.stringify({
-    // POSTリクエストに送信するデータ
+    // 送信するデータをここに記載
   })
 })
 .then(response => {
   if (!response.ok) {
-    // レスポンスが成功しなかった場合はエラーメッセージをスロー
     return response.text().then(text => { throw new Error('Request failed: ' + text); });
   }
-  return response.json();  // レスポンスが成功した場合はJSONとしてパース
+  return response.json();
 })
 .then(data => {
   console.log('Parsed JSON:', data);
@@ -76,6 +75,7 @@ fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZ
   console.error('Fetch error:', error);
   alert('エラーが発生しました: ' + error.message);
 });
+
 
 
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.5">
-  <title>Google</title>
+  <title>Google Apps Script テスト</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,7 +17,7 @@
       text-align: center;
     }
 
-    .search-container {
+    .container {
       width: 100%;
       max-width: 600px;
       display: flex;
@@ -25,11 +25,7 @@
       align-items: center;
     }
 
-    .logo {
-      margin-bottom: 20px;
-    }
-
-    .search-box {
+    .input-box {
       width: 100%;
       max-width: 500px;
       padding: 10px;
@@ -37,13 +33,7 @@
       border-radius: 24px;
       box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
       font-size: 16px;
-    }
-
-    .buttons {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
+      margin-bottom: 20px;
     }
 
     .btn {
@@ -61,46 +51,43 @@
       background-color: #f1f3f4;
       box-shadow: 0 1px 2px rgba(60, 64, 67, 0.15);
     }
-
-    #fileInput {
-      margin-top: 20px;
-    }
   </style>
 </head>
 <body>
-  <div class="search-container">
-    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" class="logo">
-    <input type="text" class="search-box" placeholder="Googleで検索">
-    <div class="buttons">
-      <button class="btn" id="uploadButton">Google 検索</button>
-      <button class="btn">I'm Feeling Lucky</button>
-    </div>
-    <input type="file" id="fileInput" accept=".json">
+  <div class="container">
+    <input type="text" id="searchTerm" class="input-box" placeholder="検索用語を入力">
+    <button class="btn" id="sendButton">送信</button>
   </div>
 
- <script>
-  const searchTerm = "テストデータ";  // テスト用の検索用語
-  fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=' + encodeURIComponent(searchTerm), {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => {
-      if (!response.ok) {
-          throw new Error('ネットワークリクエストが失敗しました: ' + response.statusText);
+  <script>
+    document.getElementById('sendButton').addEventListener('click', function() {
+      const searchTerm = document.getElementById('searchTerm').value;
+      
+      if (searchTerm) {
+        fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=' + encodeURIComponent(searchTerm), {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('ネットワークリクエストが失敗しました: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('リクエスト完了:', data);
+            alert('データが正常に送信されました: ' + JSON.stringify(data));
+        })
+        .catch(error => {
+            console.error('Fetchエラー:', error);
+            alert('リクエストに失敗しました: ' + error.message);
+        });
+      } else {
+        alert('検索用語を入力してください');
       }
-      return response.json();
-  })
-  .then(data => {
-      console.log('リクエスト完了:', data);
-      alert('データが正常に送信されました: ' + JSON.stringify(data));
-  })
-  .catch(error => {
-      console.error('Fetchエラー:', error);
-      alert('リクエストに失敗しました: ' + error.message);
-  });
-</script>
-
+    });
+  </script>
 </body>
 </html>

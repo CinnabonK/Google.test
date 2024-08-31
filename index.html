@@ -112,16 +112,25 @@
         console.log('Sending data:', fileContent);
 
         // データをGoogle Apps Scriptに送信
-fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=a', {
+fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=' + searchTerm, {
   method: 'GET',
-  mode: 'no-cors'  // CORS回避のための設定
+  headers: {
+    'Content-Type': 'application/json'
+  }
 })
 .then(response => {
-    console.log('Request completed:', response);
+    if (!response.ok) {
+        throw new Error('ネットワークリクエストが失敗しました: ' + response.statusText);
+    }
+    return response.json();
+})
+.then(data => {
+    console.log('リクエスト完了:', data);
 })
 .catch(error => {
-    console.error('Fetch error:', error);
+    console.error('Fetchエラー:', error);
 });
+
 
       } else {
         console.warn('JSONファイルがまだ読み込まれていません。');

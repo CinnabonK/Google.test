@@ -78,64 +78,29 @@
     <input type="file" id="fileInput" accept=".json">
   </div>
 
-  <script>
-    let fileContent = null;
-
-    // JSONファイルの読み込み
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            fileContent = JSON.parse(e.target.result);
-            console.log('JSON file loaded successfully:', fileContent);
-            alert('JSONファイルが正常に読み込まれました。');
-          } catch (error) {
-            console.error('JSON parsing error:', error);
-            alert('JSONファイルの解析に失敗しました。');
-          }
-        };
-        reader.readAsText(file);
-      }
-    });
-
-    // 検索バーの変更を監視し、更新時にデータを送信
-    document.querySelector('.search-box').addEventListener('input', function() {
-      const searchTerm = document.querySelector('.search-box').value;
-      console.log('Search term updated:', searchTerm);
-
-      if (fileContent) {
-        // 検索用語をファイルに追加
-        fileContent.searchTerm = searchTerm;
-
-        console.log('Sending data:', fileContent);
-
-        // データをGoogle Apps Scriptに送信
-fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=' + searchTerm, {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error('ネットワークリクエストが失敗しました: ' + response.statusText);
+ <script>
+  const searchTerm = "テストデータ";  // テスト用の検索用語
+  fetch('https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec?searchTerm=' + encodeURIComponent(searchTerm), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
     }
-    return response.json();
-})
-.then(data => {
-    console.log('リクエスト完了:', data);
-})
-.catch(error => {
-    console.error('Fetchエラー:', error);
-});
-
-
-      } else {
-        console.warn('JSONファイルがまだ読み込まれていません。');
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('ネットワークリクエストが失敗しました: ' + response.statusText);
       }
-    });
-  </script>
+      return response.json();
+  })
+  .then(data => {
+      console.log('リクエスト完了:', data);
+      alert('データが正常に送信されました: ' + JSON.stringify(data));
+  })
+  .catch(error => {
+      console.error('Fetchエラー:', error);
+      alert('リクエストに失敗しました: ' + error.message);
+  });
+</script>
+
 </body>
 </html>

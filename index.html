@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.5">
-  <title>Google</title>
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Apps Script Fetch Example</title>
+    <style>
     body {
       font-family: Arial, sans-serif;
       display: flex;
@@ -68,72 +67,37 @@
   </style>
 </head>
 <body>
-  <div class="search-container">
-    <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google" class="logo">
-    <input type="text" class="search-box" placeholder="Googleで検索">
-    <div class="buttons">
-      <button class="btn" id="uploadButton">Google 検索</button>
-      <button class="btn">I'm Feeling Lucky</button>
-    </div>
-    <input type="file" id="fileInput" accept=".json">
-  </div>
+    <input type="text" id="searchTermInput" placeholder="Enter search term">
+    <button id="submitBtn">Submit</button>
+    <div id="result"></div>
 
-  <script>
-    let fileContent = null;
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            const searchTerm = document.getElementById('searchTermInput').value;
 
-    // JSONファイルの読み込み
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            fileContent = JSON.parse(e.target.result);
-            console.log('JSON file loaded successfully:', fileContent);
-            alert('JSONファイルが正常に読み込まれました。');
-          } catch (error) {
-            console.error('JSON parsing error:', error);
-            alert('JSONファイルの解析に失敗しました。');
-          }
-        };
-        reader.readAsText(file);
-      }
-    });
-
-    // 検索バーの変更を監視し、更新時にデータを送信
-    document.querySelector('.search-box').addEventListener('input', function() {
-      const searchTerm = document.querySelector('.search-box').value;
-      console.log('Search term updated:', searchTerm);
-
-      if (fileContent) {
-        // 検索用語をファイルに追加
-        fileContent.searchTerm = searchTerm;
-
-        console.log('Sending data:', fileContent);
-
-        // データをGoogle Apps Scriptに送信
-const searchTerm = 'yourSearchTerm';
-
-fetch(`https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=${searchTerm}`, {
-    method: 'GET'
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-})
-.then(data => {
-    console.log('Success:', data);
-})
-.catch(error => {
-    console.error('Fetch error:', error);
-});
-
-      } else {
-        console.warn('JSONファイルがまだ読み込まれていません。');
-      }
-    });
-  </script>
+            if (searchTerm) {
+                // Google Apps ScriptのURLに`searchTerm`をクエリパラメータとして渡す
+                fetch(`https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=${encodeURIComponent(searchTerm)}`, {
+                    method: 'GET',
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('result').textContent = JSON.stringify(data);
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    document.getElementById('result').textContent = 'Error: ' + error.message;
+                });
+            } else {
+                console.error('searchTerm is not defined or accessible.');
+                document.getElementById('result').textContent = 'Please enter a search term.';
+            }
+        });
+    </script>
 </body>
 </html>

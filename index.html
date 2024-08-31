@@ -50,21 +50,29 @@
 
         console.log('Sending data:', fileContent);
 
-        fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(fileContent)
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Response:', data);
-          alert('データが正常に送信されました。');
-        })
-        .catch(error => {
-          console.error('Fetch error:', error);
-          alert('データの送信に失敗しました。');
+fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(fileContent)
+})
+.then(response => response.text())
+.then(text => {
+  try {
+    const data = JSON.parse(text);
+    console.log('Response:', data);
+    alert('データが正常に送信されました。');
+  } catch (error) {
+    console.error('Failed to parse JSON:', text);
+    alert('レスポンスの解析に失敗しました。');
+  }
+})
+.catch(error => {
+  console.error('Fetch error:', error);
+  alert('データの送信に失敗しました。');
+});
+
         });
 
       } else {

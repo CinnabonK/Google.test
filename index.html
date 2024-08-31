@@ -53,26 +53,30 @@
 fetch('https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec', {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    // 必要に応じて認証情報を追加
+    // 'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
   },
-  body: JSON.stringify(fileContent)
+  body: JSON.stringify({
+    // POSTリクエストに送信するデータ
+  })
 })
-.then(response => response.text())  // レスポンスをテキストとして処理
-.then(text => {
-  console.log('Raw response text:', text);  // 返ってきたレスポンスをログに出力
-  try {
-    const data = JSON.parse(text);  // JSONとしてパースを試みる
-    console.log('Parsed JSON:', data);
-    alert('データが正常に送信されました。');
-  } catch (error) {
-    console.error('Failed to parse JSON. Raw response text:', text);
-    alert('レスポンスの解析に失敗しました。');
+.then(response => {
+  if (!response.ok) {
+    // レスポンスが成功しなかった場合はエラーメッセージをスロー
+    return response.text().then(text => { throw new Error('Request failed: ' + text); });
   }
+  return response.json();  // レスポンスが成功した場合はJSONとしてパース
+})
+.then(data => {
+  console.log('Parsed JSON:', data);
+  alert('データが正常に送信されました。');
 })
 .catch(error => {
   console.error('Fetch error:', error);
-  alert('データの送信に失敗しました。');
+  alert('エラーが発生しました: ' + error.message);
 });
+
 
 
       } else {

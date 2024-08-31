@@ -112,26 +112,23 @@
         console.log('Sending data:', fileContent);
 
         // データをGoogle Apps Scriptに送信
-        fetch(`https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=${searchTerm}`, {
-            method: 'GET'
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-        });
+// データをGoogle Apps Scriptに送信
+fetch(`https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=${searchTerm}`, {
+    method: 'GET'
+})
+.then(response => {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();  // レスポンスがJSON形式の場合に処理
+})
+.then(data => {
+    console.log('Success:', data);  // 成功時のデータをコンソールに出力
+})
+.catch(error => {
+    console.error('Fetch error:', error);  // エラー発生時の処理
+});
 
-      } else {
-        console.warn('JSONファイルがまだ読み込まれていません。');
-      }
-    });
   </script>
 </body>
 </html>

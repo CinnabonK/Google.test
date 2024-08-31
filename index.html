@@ -112,23 +112,21 @@
         console.log('Sending data:', fileContent);
 
         // データをGoogle Apps Scriptに送信
-const searchTerm = 'yourSearchTerm';
-
-fetch(`https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=${searchTerm}`, {
-    method: 'GET'
-})
-.then(response => {
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-})
-.then(data => {
-    console.log('Success:', data);
-})
-.catch(error => {
-    console.error('Fetch error:', error);
-});
+        fetch(`https://script.google.com/macros/s/AKfycbwQ70gZGGiK3r7AhUoxBDhdxU4aeO-9fZgDOscuKW3orhayabDwth4NA6yW0RJ9EeHD/exec?searchTerm=${searchTerm}`, {
+            method: 'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+        });
 
       } else {
         console.warn('JSONファイルがまだ読み込まれていません。');
